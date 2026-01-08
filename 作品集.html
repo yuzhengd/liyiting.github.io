@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的项目作品集</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- 自定义Tailwind配置 -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3b82f6",
+              secondary: "#64748b",
+              dark: "#1e293b",
+              light: "#f8fafc",
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .card-hover {
+          @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+        }
+        .btn-primary {
+          @apply bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors;
+        }
+        .btn-outline {
+          @apply border border-primary text-primary px-4 py-2 rounded-md hover:bg-primary/10 transition-colors;
+        }
+        .tag {
+          @apply bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full;
+        }
+      }
+    </style>
+     <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#FFC107',
+            dark: '#1E293B',
+            light: '#F8FAFC'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    .content{position: relative;
+        top: 60px;}
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .card-hover {
+        @apply  transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+      }
+      .gradient-overlay {
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+      }
+    }
+  </style>
+  </head>
+
+  <body class="bg-gray-50 font-sans text-dark">
+    <!-- 导航栏 (全局共用) -->
+   <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+    <div class="bg-white/90 backdrop-blur-md shadow-sm">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <!-- Logo -->
+          <a href="#" class="flex items-center space-x-2">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-xl">谭</div>
+            <span class="text-xl font-bold text-dark">个人博客</span>
+          </a>
+          
+          <!-- 桌面导航 -->
+          <nav class="hidden md:flex space-x-8">
+              <a
+                href="./index.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >首页</a
+              >
+              <a
+                href="./博客.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >博客</a
+              >
+              <a
+                href="./作品集.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >作品集</a
+              >
+              <a
+                href="./关于我.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >关于我</a
+              >
+              <a
+                href="./文章示例.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >文章示例</a
+              >
+            </nav>
+          <!-- 移动端菜单按钮 -->
+          <button class="md:hidden text-gray-700 focus:outline-none" id="menu-toggle">
+            <i class="fa fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div class="md:hidden bg-white shadow-lg absolute w-full transform -translate-y-full transition-transform duration-300" id="mobile-menu">
+      <div class="container mx-auto px-4 py-4 space-y-3">
+        <a href="#" class="block py-2 text-primary font-medium">首页</a>
+        <a href="#" class="block py-2 text-gray-600 hover:text-primary">博客</a>
+        <a href="#" class="block py-2 text-gray-600 hover:text-primary">作品集</a>
+        <a href="#" class="block py-2 text-gray-600 hover:text-primary">关于我</a>
+        <a href="#" class="block py-2 text-gray-600 hover:text-primary">文章示例</a>
+      </div>
+    </div>
+  </header>
+      <!-- 页面标题 -->
+      <div class="text-center mb-12">
+        <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold mb-4 content">
+          我的项目作品集
+        </h1>
+        
+      </div>
+
+      <!-- 项目筛选分类 -->
+      <section class="mb-10">
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+          <button class="filter-btn btn-primary active" data-filter="all">
+            全部项目
+          </button>
+          <button class="filter-btn btn-outline" data-filter="web">
+            Web应用
+          </button>
+          <button class="filter-btn btn-outline" data-filter="mobile">
+            移动端
+          </button>
+          <button class="filter-btn btn-outline" data-filter="course">
+            课程设计
+          </button>
+          <button class="filter-btn btn-outline" data-filter="design">
+            UI设计
+          </button>
+        </div>
+      </section>
+
+      <!-- 项目卡片网格 -->
+      <section
+        id="projects"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        <!-- 项目卡片1 - Web应用 -->
+        <div
+          class="project-card card-hover bg-white rounded-lg overflow-hidden shadow-md"
+          data-category="web"
+        >
+          <div class="relative h-60 overflow-hidden">
+            <img
+              src="https://picsum.photos/id/180/800/600"
+              alt="电商网站项目封面"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            />
+            <div
+              class="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded"
+            >
+              Web应用
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">响应式电商网站</h3>
+            <p class="text-secondary mb-4">
+              基于Vue3 +
+              Vite构建的现代化电商平台，包含商品展示、购物车、支付等核心功能。
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="tag">Vue3</span>
+              <span class="tag">Vite</span>
+              <span class="tag">Tailwind CSS</span>
+              <span class="tag">Pinia</span>
+            </div>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="flex-1 btn-primary text-center py-2 rounded-md"
+              >
+                <i class="fa fa-external-link mr-1"></i> 在线演示
+              </a>
+              <a
+                href="#"
+                class="flex-1 btn-outline text-center py-2 rounded-md"
+              >
+                <i class="fa fa-github mr-1"></i> 源码
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目卡片2 - 移动端 -->
+        <div
+          class="project-card card-hover bg-white rounded-lg overflow-hidden shadow-md"
+          data-category="mobile"
+        >
+          <div class="relative h-60 overflow-hidden">
+            <img
+              src="https://picsum.photos/id/26/800/600"
+              alt="健身APP项目封面"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            />
+            <div
+              class="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded"
+            >
+              移动端
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">健身打卡APP</h3>
+            <p class="text-secondary mb-4">
+              React
+              Native开发的跨平台健身应用，支持运动记录、目标设定、数据统计等功能。
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="tag">React Native</span>
+              <span class="tag">Redux</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">Firebase</span>
+            </div>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="flex-1 btn-primary text-center py-2 rounded-md"
+              >
+                <i class="fa fa-external-link mr-1"></i> 在线演示
+              </a>
+              <a
+                href="#"
+                class="flex-1 btn-outline text-center py-2 rounded-md"
+              >
+                <i class="fa fa-github mr-1"></i> 源码
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目卡片3 - 课程设计 -->
+        <div
+          class="project-card card-hover bg-white rounded-lg overflow-hidden shadow-md"
+          data-category="course"
+        >
+          <div class="relative h-60 overflow-hidden">
+            <img
+              src="https://picsum.photos/id/48/800/600"
+              alt="图书管理系统封面"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            />
+            <div
+              class="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded"
+            >
+              课程设计
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">图书管理系统</h3>
+            <p class="text-secondary mb-4">
+              基于Node.js +
+              Express开发的后台管理系统，实现图书借阅、归还、库存管理等功能。
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="tag">Node.js</span>
+              <span class="tag">Express</span>
+              <span class="tag">MongoDB</span>
+              <span class="tag">EJS</span>
+            </div>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="flex-1 btn-primary text-center py-2 rounded-md"
+              >
+                <i class="fa fa-external-link mr-1"></i> 在线演示
+              </a>
+              <a
+                href="#"
+                class="flex-1 btn-outline text-center py-2 rounded-md"
+              >
+                <i class="fa fa-github mr-1"></i> 源码
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目卡片4 - UI设计 -->
+        <div
+          class="project-card card-hover bg-white rounded-lg overflow-hidden shadow-md"
+          data-category="design"
+        >
+          <div class="relative h-60 overflow-hidden">
+            <img
+              src="https://picsum.photos/id/96/800/600"
+              alt="旅行APP UI设计封面"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            />
+            <div
+              class="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded"
+            >
+              UI设计
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">旅行APP UI设计</h3>
+            <p class="text-secondary mb-4">
+              为旅行平台设计的移动端UI界面，包含首页、目的地、预订等核心页面，注重用户体验。
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="tag">Figma</span>
+              <span class="tag">UI/UX</span>
+              <span class="tag">原型设计</span>
+              <span class="tag">用户调研</span>
+            </div>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="flex-1 btn-primary text-center py-2 rounded-md"
+              >
+                <i class="fa fa-external-link mr-1"></i> 查看设计
+              </a>
+              <a
+                href="#"
+                class="flex-1 btn-outline text-center py-2 rounded-md"
+              >
+                <i class="fa fa-github mr-1"></i> 原型
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目卡片5 - Web应用 -->
+        <div
+          class="project-card card-hover bg-white rounded-lg overflow-hidden shadow-md"
+          data-category="web"
+        >
+          <div class="relative h-60 overflow-hidden">
+            <img
+              src="https://picsum.photos/id/160/800/600"
+              alt="个人博客系统封面"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            />
+            <div
+              class="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded"
+            >
+              Web应用
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">个人博客系统</h3>
+            <p class="text-secondary mb-4">
+              Next.js开发的服务端渲染博客系统，支持Markdown编辑、标签分类、评论等功能。
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="tag">Next.js</span>
+              <span class="tag">React</span>
+              <span class="tag">MDX</span>
+              <span class="tag">Tailwind</span>
+            </div>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="flex-1 btn-primary text-center py-2 rounded-md"
+              >
+                <i class="fa fa-external-link mr-1"></i> 在线演示
+              </a>
+              <a
+                href="#"
+                class="flex-1 btn-outline text-center py-2 rounded-md"
+              >
+                <i class="fa fa-github mr-1"></i> 源码
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目卡片6 - 课程设计 -->
+        <div
+          class="project-card card-hover bg-white rounded-lg overflow-hidden shadow-md"
+          data-category="course"
+        >
+          <div class="relative h-60 overflow-hidden">
+            <img
+              src="https://picsum.photos/id/201/800/600"
+              alt="校园导航系统封面"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            />
+            <div
+              class="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded"
+            >
+              课程设计
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">校园导航系统</h3>
+            <p class="text-secondary mb-4">
+              基于HTML5 +
+              JavaScript开发的校园地图导航系统，支持路径规划、POI搜索等功能。
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="tag">HTML5</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">高德地图API</span>
+              <span class="tag">本地存储</span>
+            </div>
+            <div class="flex gap-3">
+              <a
+                href="#"
+                class="flex-1 btn-primary text-center py-2 rounded-md"
+              >
+                <i class="fa fa-external-link mr-1"></i> 在线演示
+              </a>
+              <a
+                href="#"
+                class="flex-1 btn-outline text-center py-2 rounded-md"
+              >
+                <i class="fa fa-github mr-1"></i> 源码
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 页脚 (全局共用) -->
+    <footer class="bg-dark text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-xl font-bold mb-4">我的作品集</h3>
+            <p class="text-gray-400">
+              专注于前端开发与UI设计，持续学习和创造优秀的数字产品。
+            </p>
+            <div class="mt-6 flex space-x-4">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i class="fa fa-github text-xl"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i class="fa fa-linkedin text-xl"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i class="fa fa-behance text-xl"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i class="fa fa-dribbble text-xl"></i
+              ></a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold mb-4">快速链接</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <a href="#" class="hover:text-white transition-colors">首页</a>
+              </li>
+              <li>
+                <a href="#projects" class="hover:text-white transition-colors"
+                  >项目展示</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >关于我</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >联系方式</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold mb-4">联系我</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li class="flex items-center">
+                <i class="fa fa-envelope mr-2"></i> 18783731406@163.com
+              </li>
+              <li class="flex items-center">
+                <i class="fa fa-phone mr-2"></i> +86 123 4567 8901
+              </li>
+              <li class="flex items-center">
+                <i class="fa fa-map-marker mr-2"></i> 北京市朝阳区某某大厦
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500"
+        >
+          <p>&copy; 2024 我的作品集 | 保留所有权利</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript交互逻辑 -->
+    <script>
+      // 移动端菜单切换
+      const menuBtn = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        const icon = menuBtn.querySelector("i");
+        icon.classList.toggle("fa-bars");
+        icon.classList.toggle("fa-times");
+      });
+
+      // 项目筛选功能
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      const projectCards = document.querySelectorAll(".project-card");
+
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          // 移除所有按钮的激活状态
+          filterBtns.forEach((b) => {
+            b.classList.remove("btn-primary", "active");
+            b.classList.add("btn-outline");
+          });
+
+          // 添加当前按钮的激活状态
+          btn.classList.remove("btn-outline");
+          btn.classList.add("btn-primary", "active");
+
+          const filter = btn.getAttribute("data-filter");
+
+          // 筛选项目卡片
+          projectCards.forEach((card) => {
+            const category = card.getAttribute("data-category");
+            if (filter === "all" || category === filter) {
+              card.classList.remove("hidden");
+              // 添加渐入动画
+              card.style.opacity = "0";
+              setTimeout(() => {
+                card.style.opacity = "1";
+                card.style.transition = "opacity 0.3s ease";
+              }, 50);
+            } else {
+              card.classList.add("hidden");
+            }
+          });
+        });
+      });
+
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: "smooth",
+            });
+
+            // 关闭移动端菜单
+            if (!mobileMenu.classList.contains("hidden")) {
+              mobileMenu.classList.add("hidden");
+              const icon = menuBtn.querySelector("i");
+              icon.classList.remove("fa-times");
+              icon.classList.add("fa-bars");
+            }
+          }
+        });
+      });
+
+      // 滚动时导航栏样式变化
+      window.addEventListener("scroll", () => {
+        const header = document.querySelector("header");
+        if (window.scrollY > 50) {
+          header.classList.add("shadow-md");
+          header.classList.remove("shadow-sm");
+        } else {
+          header.classList.remove("shadow-md");
+          header.classList.add("shadow-sm");
+        }
+      });
+    </script>
+  </body>
+</html>

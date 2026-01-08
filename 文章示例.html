@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文章示例</title>
+    <!-- 语法高亮库 (仅用于解析，样式完全由CSS控制) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+      /* 通用样式重置 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2c3e50;
+        --accent-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #34495e;
+        --success-color: #27ae60;
+        --text-color: #333;
+        --text-light: #7f8c8d;
+        --border-color: #ecf0f1;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+        line-height: 1.7;
+        color: var(--text-color);
+        background-color: #f5f7fa;
+        padding-top: 70px;
+      }
+
+      /* 任务1：导航栏（全局共用） */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        padding: 15px 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--secondary-color);
+        font-weight: 700;
+        font-size: 1.4rem;
+      }
+
+      .navbar-brand span {
+        color: var(--primary-color);
+      }
+
+      .navbar-links {
+        display: flex;
+        gap: 25px;
+      }
+
+      .navbar-links a {
+        text-decoration: none;
+        color: var(--dark-color);
+        font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+        padding: 5px 0;
+      }
+
+      .navbar-links a:hover {
+        color: var(--primary-color);
+      }
+
+      .navbar-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary-color);
+        transition: var(--transition);
+      }
+
+      .navbar-links a:hover::after {
+        width: 100%;
+      }
+
+      .mobile-toggle {
+        display: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* 任务2：文章头部 */
+      .article-header {
+        max-width: 900px;
+        margin: 40px auto 30px;
+        padding: 0 25px;
+      }
+
+      .article-header h1 {
+        font-size: 2.5rem;
+        color: var(--secondary-color);
+        line-height: 1.2;
+        margin-bottom: 15px;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        color: var(--text-light);
+        font-size: 0.95rem;
+        margin: 15px 0;
+      }
+
+      .article-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 15px;
+      }
+
+      .tag {
+        background: var(--light-color);
+        color: var(--primary-color);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      .tag:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* 任务3：文章主体 */
+      .article-content {
+        max-width: 900px;
+        margin: 0 auto 40px;
+        padding: 0 25px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 35px;
+      }
+
+      .article-content h2 {
+        font-size: 1.9rem;
+        color: var(--secondary-color);
+        margin: 2rem 0 1.2rem;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      .article-content h3 {
+        font-size: 1.5rem;
+        color: var(--dark-color);
+        margin: 1.8rem 0 0.8rem;
+      }
+
+      .article-content p {
+        margin-bottom: 1.3rem;
+        font-size: 1.05rem;
+        color: #444;
+      }
+
+      ul,
+      ol {
+        margin: 1.2rem 0 1.2rem 2rem;
+        padding-left: 20px;
+      }
+
+      li {
+        margin-bottom: 0.7rem;
+      }
+
+      ul li {
+        position: relative;
+        padding-left: 25px;
+      }
+
+      ul li::before {
+        content: "•";
+        color: var(--primary-color);
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        font-size: 1.4rem;
+        line-height: 1;
+      }
+
+      ol li {
+        counter-increment: list;
+      }
+
+      ol li::before {
+        content: counter(list) ".";
+        position: absolute;
+        left: -25px;
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      blockquote {
+        border-left: 4px solid var(--primary-color);
+        background: #f8f9fa;
+        padding: 20px 25px;
+        margin: 1.8rem 0;
+        border-radius: 0 4px 4px 0;
+        font-style: italic;
+        color: var(--text-light);
+        position: relative;
+      }
+
+      blockquote::before {
+        content: '"';
+        position: absolute;
+        top: -15px;
+        left: 10px;
+        font-size: 4rem;
+        color: rgba(52, 152, 219, 0.15);
+        font-family: Georgia, serif;
+        line-height: 1;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
+        margin: 1.8rem 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        display: block;
+      }
+
+      .image-caption {
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-top: -25px;
+        margin-bottom: 1.5rem;
+      }
+
+      /* 代码块样式 - 任务3要求 */
+      pre {
+        background: #2d2d2d;
+        border-radius: 6px;
+        overflow: hidden;
+        margin: 1.8rem 0;
+        position: relative;
+      }
+
+      code {
+        font-family: "Fira Code", "Consolas", monospace;
+        font-size: 0.95rem;
+        display: block;
+        padding: 20px;
+        color: #f8f8f2;
+        line-height: 1.5;
+        overflow-x: auto;
+      }
+
+      /* 语法高亮样式 - 纯CSS实现 */
+      .hljs-keyword {
+        color: #f92672;
+        font-weight: bold;
+      }
+
+      .hljs-built_in {
+        color: #66d9ef;
+      }
+
+      .hljs-string {
+        color: #a6e22e;
+      }
+
+      .hljs-comment {
+        color: #75715e;
+        font-style: italic;
+      }
+
+      .hljs-number {
+        color: #ae81ff;
+      }
+
+      .hljs-variable {
+        color: #f8f8f2;
+      }
+
+      .hljs-function {
+        color: #e6db74;
+      }
+
+      .hljs-title {
+        color: #a6e22e;
+      }
+
+      .hljs-params {
+        color: #fd971f;
+      }
+
+      .hljs-operator {
+        color: #f92672;
+      }
+
+      .hljs-punctuation {
+        color: #f8f8f2;
+      }
+
+      .hljs-attr {
+        color: #a6e22e;
+      }
+
+      .hljs-attribute {
+        color: #fd971f;
+      }
+
+      /* 任务4：文章底部 */
+      .article-footer {
+        max-width: 900px;
+        margin: 0 auto 40px;
+        padding: 0 25px;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: space-between;
+        margin: 30px 0;
+        gap: 15px;
+      }
+
+      .pagination a {
+        flex: 1;
+        text-decoration: none;
+        padding: 15px 20px;
+        border-radius: 6px;
+        background: white;
+        box-shadow: var(--shadow);
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        color: var(--dark-color);
+      }
+
+      .pagination a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .prev {
+        justify-content: flex-start;
+        border-left: 3px solid var(--primary-color);
+      }
+
+      .next {
+        justify-content: flex-end;
+        border-right: 3px solid var(--accent-color);
+      }
+
+      .prev span,
+      .next span {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-bottom: 5px;
+      }
+
+      .share-section {
+        background: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 25px;
+        margin-top: 20px;
+      }
+
+      .share-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        color: var(--secondary-color);
+      }
+
+      .share-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .share-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 50px;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      }
+
+      .share-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .facebook {
+        background: #3b5998;
+      }
+      .twitter {
+        background: #1da1f2;
+      }
+      .linkedin {
+        background: #0077b5;
+      }
+      .weibo {
+        background: #e6162d;
+      }
+      .wechat {
+        background: #7bc549;
+      }
+
+      /* 任务5：评论区 */
+      .comments-section {
+        max-width: 900px;
+        margin: 0 auto 40px;
+        padding: 0 25px;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        color: var(--secondary-color);
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: var(--primary-color);
+        border-radius: 3px;
+      }
+
+      .comment-list {
+        background: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 25px;
+        margin-bottom: 30px;
+      }
+
+      .comment {
+        padding: 20px;
+        border-bottom: 1px solid var(--border-color);
+        position: relative;
+      }
+
+      .comment:last-child {
+        border-bottom: none;
+      }
+
+      .comment::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--primary-color);
+        border-radius: 2px 0 0 2px;
+      }
+
+      .comment-author {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--secondary-color);
+        margin-bottom: 5px;
+      }
+
+      .comment-date {
+        color: var(--text-light);
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .comment-content {
+        line-height: 1.7;
+        color: #555;
+      }
+
+      .comment-form {
+        background: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 30px;
+      }
+
+      .comment-form h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: var(--secondary-color);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark-color);
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: var(--transition);
+        font-family: inherit;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      }
+
+      .submit-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .submit-btn:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+      }
+
+      /* 任务6：页脚（全局共用） */
+      .footer {
+        background: var(--secondary-color);
+        color: white;
+        padding: 50px 0 20px;
+      }
+
+      .footer-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 25px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+      }
+
+      .footer-column h3 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: var(--primary-color);
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 12px;
+      }
+
+      .footer-links a {
+        color: #bdc3c7;
+        text-decoration: none;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .footer-links a:hover {
+        color: white;
+        transform: translateX(5px);
+      }
+
+      .footer-links a::before {
+        content: "→";
+        font-size: 0.8rem;
+      }
+
+      .footer-bottom {
+        max-width: 900px;
+        margin: 40px auto 0;
+        padding: 0 25px;
+        text-align: center;
+        color: #bdc3c7;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 992px) {
+        .article-header h1 {
+          font-size: 2.2rem;
+        }
+
+        .article-content {
+          padding: 25px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .mobile-toggle {
+          display: block;
+        }
+
+        .navbar-links {
+          position: fixed;
+          top: 70px;
+          right: -100%;
+          flex-direction: column;
+          background: white;
+          width: 80%;
+          height: calc(100vh - 70px);
+          padding: 25px;
+          box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+          transition: var(--transition);
+        }
+
+        .navbar-links.active {
+          right: 0;
+        }
+
+        .article-header h1 {
+          font-size: 1.9rem;
+        }
+
+        .pagination {
+          flex-direction: column;
+        }
+
+        .prev,
+        .next {
+          justify-content: center;
+          border: none;
+          text-align: center;
+        }
+
+        .prev {
+          border-bottom: 2px solid var(--primary-color);
+          padding-bottom: 15px;
+          margin-bottom: 15px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        body {
+          padding-top: 60px;
+        }
+
+        .navbar {
+          padding: 12px 5%;
+        }
+
+        .article-header {
+          margin-top: 25px;
+        }
+
+        .article-header h1 {
+          font-size: 1.7rem;
+        }
+
+        .article-content {
+          padding: 20px;
+        }
+
+        .section-title {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#165DFF",
+              secondary: "#FFC107",
+              dark: "#1E293B",
+              light: "#F8FAFC",
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .text-shadow {
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card-hover {
+          @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+        }
+        .gradient-overlay {
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.7) 100%
+          );
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 任务1：导航栏（全局共用） -->
+    <header
+      class="fixed w-full top-0 z-50 transition-all duration-300"
+      id="navbar"
+    >
+      <div class="bg-white/90 backdrop-blur-md shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center py-4">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-2">
+              <div
+                class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-xl"
+              >
+                谭
+              </div>
+              <span class="text-xl font-bold text-dark">个人博客</span>
+            </a>
+
+            <!-- 桌面导航 -->
+            <nav class="hidden md:flex space-x-8">
+              <a
+                href="./index.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >首页</a
+              >
+              <a
+                href="./博客.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >博客</a
+              >
+              <a
+                href="./作品集.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >作品集</a
+              >
+              <a
+                href="./关于我.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >关于我</a
+              >
+              <a
+                href="./文章示例.html"
+                class="text-gray-600 hover:text-primary font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >文章示例</a
+              >
+            </nav>
+            
+
+            <!-- 移动端菜单按钮 -->
+            <button
+              class="md:hidden text-gray-700 focus:outline-none"
+              id="menu-toggle"
+            >
+              <i class="fa fa-bars text-2xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 移动端导航菜单 -->
+      <div
+        class="md:hidden bg-white shadow-lg absolute w-full transform -translate-y-full transition-transform duration-300"
+        id="mobile-menu"
+      >
+        <div class="container mx-auto px-4 py-4 space-y-3">
+          <a href="#" class="block py-2 text-primary font-medium">首页</a>
+          <a href="#" class="block py-2 text-gray-600 hover:text-primary"
+            >博客</a
+          >
+          <a href="#" class="block py-2 text-gray-600 hover:text-primary"
+            >作品集</a
+          >
+          <a href="#" class="block py-2 text-gray-600 hover:text-primary"
+            >关于我</a
+          >
+          <a href="#" class="block py-2 text-gray-600 hover:text-primary"
+            >文章示例</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- 任务2：文章头部 -->
+    <header class="article-header">
+      <h1>深度学习入门：从理论到实践</h1>
+      <div class="article-meta">
+        <span>📅 <time datetime="2023-11-10">2028年11月10日</time></span>
+        <span
+          >🔄 最后更新: <time datetime="2023-11-25">2036年11月25日</time></span
+        >
+        <span>👤 作者: 宛嘉乐</span>
+      </div>
+      <div class="tags">
+        <span class="tag">深度学习</span>
+        <span class="tag">神经网络</span>
+        <span class="tag">人工智能</span>
+        <span class="tag">Python</span>
+        <span class="tag">教程</span>
+      </div>
+    </header>
+
+    <!-- 任务3：文章主体 -->
+    <main class="article-content">
+      <h2>深度学习的核心概念</h2>
+      <p>
+        深度学习作为机器学习的一个子领域，近年来在计算机视觉、自然语言处理等领域取得了突破性进展。与传统机器学习方法不同，深度学习通过多层神经网络自动学习数据的特征表示，无需人工设计特征。
+      </p>
+
+      <h3>神经网络的基本结构</h3>
+      <p>一个典型的神经网络由以下部分组成：</p>
+      <ul>
+        <li><strong>输入层</strong>：接收原始数据输入</li>
+        <li>
+          <strong>隐藏层</strong
+          >：进行特征提取和转换（深度学习通常有多层隐藏层）
+        </li>
+        <li><strong>输出层</strong>：产生最终预测结果</li>
+      </ul>
+
+      <h2>实战：使用PyTorch构建CNN</h2>
+      <p>
+        下面是一个使用PyTorch构建卷积神经网络(CNN)的完整示例，用于手写数字识别(MNIST数据集)：
+      </p>
+
+      <!-- 代码块 - 语法高亮 -->
+      <pre><code class="python">import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+# 定义CNN模型
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
+        self.relu = nn.ReLU()
+        self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.fc2 = nn.Linear(128, 10)
+        self.dropout = nn.Dropout(0.5)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+        x = self.conv2(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+        x = x.view(-1, 64 * 7 * 7)
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        x = self.fc2(x)
+        return x
+
+# 数据预处理
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.1307,), (0.3081,))
+])
+
+# 加载MNIST数据集
+train_dataset = datasets.MNIST(root='./data', train=True, 
+                              transform=transform, download=True)
+test_dataset = datasets.MNIST(root='./data', train=False, 
+                             transform=transform)
+
+train_loader = DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
+test_loader = DataLoader(dataset=test_dataset, batch_size=1000, shuffle=False)
+
+# 初始化模型、损失函数和优化器
+model = CNN()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# 训练模型
+def train(epoch):
+    model.train()
+    for batch_idx, (data, target) in enumerate(train_loader):
+        optimizer.zero_grad()
+        output = model(data)
+        loss = criterion(output, target)
+        loss.backward()
+        optimizer.step()
+        if batch_idx % 100 == 0:
+            print(f'Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} '
+                  f'({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}')
+
+# 测试模型
+def test():
+    model.eval()
+    test_loss = 0
+    correct = 0
+    with torch.no_grad():
+        for data, target in test_loader:
+            output = model(data)
+            test_loss += criterion(output, target).item()
+            pred = output.argmax(dim=1, keepdim=True)
+            correct += pred.eq(target.view_as(pred)).sum().item()
+
+    test_loss /= len(test_loader.dataset)
+    print(f'\nTest set: Average loss: {test_loss:.4f}, '
+          f'Accuracy: {correct}/{len(test_loader.dataset)} '
+          f'({100. * correct / len(test_loader.dataset):.0f}%)\n')
+
+# 开始训练
+for epoch in range(1, 11):
+    train(epoch)
+    test()</code></pre>
+
+      <h3>关键组件解析</h3>
+      <ol>
+        <li><strong>卷积层 (Conv2d)</strong>：提取图像的局部特征</li>
+        <li><strong>激活函数 (ReLU)</strong>：引入非线性，增强模型表达能力</li>
+        <li><strong>池化层 (MaxPool2d)</strong>：降低空间维度，减少计算量</li>
+        <li><strong>全连接层 (Linear)</strong>：整合特征进行分类</li>
+        <li><strong>Dropout</strong>：防止过拟合，提高模型泛化能力</li>
+      </ol>
+
+      <h2>性能优化技巧</h2>
+      <blockquote>
+        <p>
+          "在MNIST数据集上，适当调整学习率和批量大小可以使模型准确率从95%提升至99.2%，而训练时间减少40%。"
+        </p>
+      </blockquote>
+
+      <p>实际项目中的优化策略：</p>
+      <ul>
+        <li>
+          使用学习率调度器（如<code>ReduceLROnPlateau</code>）动态调整学习率
+        </li>
+        <li>采用数据增强技术（旋转、平移、缩放）扩充训练数据</li>
+        <li>使用预训练模型进行迁移学习，尤其在小数据集上效果显著</li>
+        <li>在GPU上训练模型，使用<code>torch.cuda</code>加速计算</li>
+      </ul>
+
+      <img
+        src="https://via.placeholder.com/850x450/2c3e50/ffffff?text=CNN+架构示意图"
+        alt="卷积神经网络架构示意图"
+      />
+      <div class="image-caption">图1：卷积神经网络(CNN)架构示意图</div>
+    </main>
+
+    <!-- 任务4：文章底部 -->
+    <section class="article-footer">
+      <div class="pagination">
+        <a href="#" class="prev">
+          <span>上一篇</span>
+          <span>机器学习基础：从线性回归到决策树</span>
+        </a>
+        <a href="#" class="next">
+          <span>下一篇</span>
+          <span>Transformer模型：自然语言处理的革命</span>
+        </a>
+      </div>
+
+      <div class="share-section">
+        <h3 class="share-title">分享这篇文章</h3>
+        <div class="share-buttons">
+          <a href="#" class="share-btn facebook">Facebook</a>
+          <a href="#" class="share-btn twitter">Twitter</a>
+          <a href="#" class="share-btn linkedin">LinkedIn</a>
+          <a href="#" class="share-btn weibo">微博</a>
+          <a href="#" class="share-btn wechat">微信</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 任务5：评论区 -->
+    <section class="comments-section">
+      <h2 class="section-title">读者评论 (3)</h2>
+
+      <div class="comment-list">
+        <div class="comment">
+          <div class="comment-author">李华</div>
+          <div class="comment-date">📅 2023-11-26 09:15</div>
+          <div class="comment-content">
+            <p>
+              非常清晰的教程！特别是CNN代码部分，注释详细，结构清晰。我按照教程实现了模型，准确率达到98.7%。请问如何进一步优化以达到99%以上？
+            </p>
+          </div>
+        </div>
+
+        <div class="comment">
+          <div class="comment-author">王明</div>
+          <div class="comment-date">📅 2023-11-26 14:30</div>
+          <div class="comment-content">
+            <p>
+              感谢分享！在运行代码时遇到了维度不匹配的问题，后来发现是PyTorch版本问题。建议在教程中注明适用的PyTorch版本。
+            </p>
+            <p>另外，关于数据增强部分，能否提供更具体的代码示例？</p>
+          </div>
+        </div>
+
+        <div class="comment">
+          <div class="comment-author">张静</div>
+          <div class="comment-date">📅 2023-11-27 11:05</div>
+          <div class="comment-content">
+            <p>
+              对于初学者非常友好的教程！我之前对深度学习只有理论了解，通过这个实践项目终于理解了CNN的工作原理。期待后续的RNN和Transformer教程！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="comment-form">
+        <h3>发表新评论</h3>
+        <form id="commentForm">
+          <div class="form-group">
+            <label for="name">姓名 *</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="请输入您的姓名"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">邮箱 *</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="不会公开显示"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="comment">评论内容 *</label>
+            <textarea
+              id="comment"
+              name="comment"
+              rows="5"
+              required
+              placeholder="分享您的见解或疑问..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">提交评论</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 任务6：页脚（全局共用） -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>关于本站</h3>
+          <p style="color: #bdc3c7; line-height: 1.8; margin-top: 15px">
+            TechBlog
+            致力于分享高质量的技术文章和教程，涵盖人工智能、Web开发、数据科学等前沿技术领域。
+          </p>
+        </div>
+
+        <div class="footer-column">
+          <h3>热门分类</h3>
+          <ul class="footer-links">
+            <li><a href="#">深度学习</a></li>
+            <li><a href="#">自然语言处理</a></li>
+            <li><a href="#">计算机视觉</a></li>
+            <li><a href="#">Web开发</a></li>
+            <li><a href="#">数据科学</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>快速链接</h3>
+          <ul class="footer-links">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">最新文章</a></li>
+            <li><a href="#">教程系列</a></li>
+            <li><a href="#">案例研究</a></li>
+            <li><a href="#">关于我们</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>联系我们</h3>
+          <ul class="footer-links">
+            <li><a href="#">📧 ****@techblog.com</a></li>
+            <li><a href="#">📱 +86 10086</a></li>
+            <li><a href="#">🏢 重庆安防职业学院</a></li>
+            <li><a href="#">🔗 GitHub</a></li>
+            <li><a href="#">🔗 LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>
+          &copy; 2023 TechBlog. 保留所有权利。 Designed with ❤️ for developers.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // 任务1：移动端导航切换
+      document
+        .querySelector(".mobile-toggle")
+        .addEventListener("click", function () {
+          document.querySelector(".navbar-links").classList.toggle("active");
+        });
+
+      // 任务5：评论表单提交
+      document
+        .getElementById("commentForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const comment = document.getElementById("comment").value;
+
+          // 创建新的评论元素
+          const newComment = document.createElement("div");
+          newComment.className = "comment";
+          newComment.innerHTML = `
+                <div class="comment-author">${name}</div>
+                <div class="comment-date">📅 刚刚发布</div>
+                <div class="comment-content">
+                    <p>${comment}</p>
+                </div>
+            `;
+
+          // 添加到评论列表
+          document.querySelector(".comment-list").prepend(newComment);
+
+          // 重置表单
+          this.reset();
+          alert("评论提交成功！感谢您的分享。");
+        });
+
+      // 语法高亮初始化
+      document.querySelectorAll("pre code").forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    </script>
+  </body>
+</html>
